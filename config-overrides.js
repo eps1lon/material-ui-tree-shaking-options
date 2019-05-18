@@ -1,4 +1,4 @@
-const { override, fixBabelImports } = require("customize-cra");
+const { override, addBabelPlugin } = require("customize-cra");
 
 /**
  * For prod builds webpack with tree-shaking does all the heavy lifting. tree-shaking
@@ -13,11 +13,14 @@ const { override, fixBabelImports } = require("customize-cra");
  */
 
 const devOverride = override(
-  fixBabelImports("import", {
-    libraryName: "@material-ui/icons",
-    libraryDirectory: "esm",
-    camel2DashComponentName: false
-  })
+  addBabelPlugin([
+    "transform-imports",
+    {
+      "@material-ui/icons": {
+        transform: "@material-ui/icons/esm/${member}"
+      }
+    }
+  ])
 );
 
 const prodOverride = override();
